@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 65" width="200" height="65">
+  <g transform="translate(15, 7)">
+    <!-- Oval border container with double border effect -->
+    <rect x="5" y="5" width="160" height="42" rx="21" fill="none" stroke="#1E1E1E" stroke-width="2.5"/>
+    <path d="M 12 26 C 25 10, 145 10, 158 26 C 145 42, 25 42, 12 26 Z" fill="#1E1E1E"/>
+    <!-- ZIPPUT text -->
+    <text x="85" y="27" fill="#FFFFFF" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-style="italic" font-size="19" letter-spacing="1" text-anchor="middle">ZIPPUT</text>
+    <!-- Subtitle breathe better inside small cloud shape -->
+    <path d="M 52 30 Q 85 36 118 30 Q 85 39 52 30 Z" fill="#FFFFFF" opacity="0.3"/>
+    <text x="85" y="37" fill="#FFFFFF" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="700" font-size="6.5" letter-spacing="0.5" text-anchor="middle">breathe better</text>
+  </g>
+</svg>

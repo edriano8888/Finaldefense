@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 65" width="200" height="65">
+  <g fill="#1E1E1E">
+    <!-- Crescent Moon Icon -->
+    <path d="M 100 8 A 10 10 0 1 0 100 24 A 7 7 0 1 1 100 8 Z" fill="#1E1E1E"/>
+    <!-- Small star details in moon -->
+    <circle cx="95" cy="14" r="1" fill="#FFFFFF"/>
+    <circle cx="98" cy="18" r="0.8" fill="#FFFFFF"/>
+    <!-- Brand text Dreamfully -->
+    <text x="100" y="46" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="20" font-weight="900" letter-spacing="-0.3" text-anchor="middle">Dreamfully</text>
+  </g>
+</svg>

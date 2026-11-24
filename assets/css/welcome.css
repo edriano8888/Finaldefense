@@ -1,0 +1,26 @@
+body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+.sidebar-item { position: relative; overflow: hidden; }
+.sidebar-item.active {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+    color: white;
+    border-left: 4px solid #1FAE5B;
+}
+.sidebar-item:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+/* Custom scrollbar for columns */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #E5E7EB;
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #D1D5DB;
+}

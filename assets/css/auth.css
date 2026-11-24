@@ -1,0 +1,2 @@
+/* Hide default password reveal in Edge/IE */
+::-ms-reveal { display: none; }

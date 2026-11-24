@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 65" width="200" height="65">
+  <g fill="#1E1E1E">
+    <!-- Globe Icon with rays -->
+    <g transform="translate(18, 14)">
+      <!-- Rays -->
+      <line x1="8" y1="4" x2="4" y2="1" stroke="#1E1E1E" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="16" y1="2" x2="16" y2="-2" stroke="#1E1E1E" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="24" y1="4" x2="28" y2="1" stroke="#1E1E1E" stroke-width="1.8" stroke-linecap="round"/>
+      <!-- Globe hemisphere -->
+      <circle cx="16" cy="18" r="13" fill="none" stroke="#1E1E1E" stroke-width="2"/>
+      <path d="M 6 18 C 10 12, 22 12, 26 18" fill="none" stroke="#1E1E1E" stroke-width="1.5"/>
+      <path d="M 16 5 L 16 31" fill="none" stroke="#1E1E1E" stroke-width="1.5"/>
+      <path d="M 10 10 C 13 14, 13 22, 10 26" fill="none" stroke="#1E1E1E" stroke-width="1.5"/>
+    </g>
+    <!-- Text Awesome Maps™ -->
+    <text x="115" y="41" font-family="'Plus Jakarta Sans', 'Architects Daughter', cursive, sans-serif" font-size="20" font-weight="800" text-anchor="middle">Awesome Maps™</text>
+  </g>
+</svg>

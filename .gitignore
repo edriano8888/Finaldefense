@@ -1,0 +1,42 @@
+# Sensitive Files
+.env
+.env.local
+.env.*.local
+armful_db.sql
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Application Cache/Logs
+application/cache/*
+!application/cache/index.html
+application/logs/*
+!application/logs/index.html
+
+!application/*/.htaccess
+
+# Composer
+composer.lock
+/vendor/
+
+# Testing
+tests/mocks/database/ci_test.sqlite
+/tests/tests/
+/tests/results/
+
+# User Guide
+user_guide_src/build/*
+user_guide_src/cilexer/build/*
+user_guide_src/cilexer/dist/*
+user_guide_src/cilexer/pycilexer.egg-info/*
+
+# IDE Files
+/nbproject/
+.idea/*
+*.vscode/*
+*.sublime-workspace
+*.sublime-project
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache

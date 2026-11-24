@@ -1,0 +1,63 @@
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #F8FAFC;
+}
+
+.sidebar-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-item.active {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+    color: white;
+    border-left: 4px solid #1FAE5B;
+}
+
+.sidebar-item:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Saral-inspired modern input */
+.modern-input {
+    transition: all 0.2s ease;
+}
+
+.modern-input:focus-within {
+    box-shadow: 0 0 0 4px rgba(31, 174, 91, 0.1);
+    border-color: #1FAE5B;
+}

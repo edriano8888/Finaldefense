@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 65" width="200" height="65">
+  <g fill="#1E1E1E">
+    <!-- Lightning bolt symbol -->
+    <g transform="translate(35, 12)">
+      <polygon points="12,0 0,18 10,18 6,34 22,12 11,12" fill="none" stroke="#1E1E1E" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+    <!-- Brand text tap out -->
+    <g font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="22" letter-spacing="-0.5">
+      <text x="125" y="30" text-anchor="middle">tap</text>
+      <text x="125" y="52" text-anchor="middle">out</text>
+    </g>
+  </g>
+</svg>

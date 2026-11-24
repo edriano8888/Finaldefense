@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 65" width="200" height="65">
+  <g fill="#1E1E1E">
+    <text x="100" y="34" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="24" font-weight="900" letter-spacing="2" text-anchor="middle">VITAL</text>
+    <!-- Inverted triangle in V -->
+    <polygon points="58,16 66,16 62,25" fill="#1E1E1E"/>
+    <text x="100" y="52" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="3" text-anchor="middle">RELIEFWEAR</text>
+  </g>
+</svg>
