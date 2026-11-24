@@ -5,11 +5,31 @@
  * Idempotent: safe to run on every redeploy without duplicating accounts.
  */
 
-$host = getenv('DB_HOSTNAME') ?: getenv('MYSQLHOST') ?: '127.0.0.1';
-$port = (int)(getenv('DB_PORT') ?: getenv('MYSQLPORT') ?: 3306);
-$user = getenv('DB_USERNAME') ?: getenv('MYSQLUSER') ?: 'root';
-$pass = getenv('DB_PASSWORD') ?: getenv('MYSQLPASSWORD') ?: '';
-$name = getenv('DB_NAME') ?: getenv('MYSQLDATABASE') ?: 'railway';
+mysqli_report(MYSQLI_REPORT_OFF);
+
+$getEnv = function(string $key): string {
+    $val = getenv($key);
+    if ($val !== false && $val !== '') return trim((string)$val, " \t\n\r\0\x0B\"'");
+    if (isset($_ENV[$key]) && $_ENV[$key] !== '') return trim((string)$_ENV[$key], " \t\n\r\0\x0B\"'");
+    if (isset($_SERVER[$key]) && $_SERVER[$key] !== '') return trim((string)$_SERVER[$key], " \t\n\r\0\x0B\"'");
+    return '';
+};
+
+$host = $getEnv('DB_HOSTNAME') ?: $getEnv('MYSQLHOST') ?: '127.0.0.1';
+$port = (int)($getEnv('DB_PORT') ?: $getEnv('MYSQLPORT') ?: 3306);
+$user = $getEnv('DB_USERNAME') ?: $getEnv('MYSQLUSER') ?: 'root';
+$pass = $getEnv('DB_PASSWORD') ?: $getEnv('MYSQLPASSWORD') ?: '';
+$name = $getEnv('DB_NAME') ?: $getEnv('MYSQLDATABASE') ?: 'railway';
+
+$dbUrl = $getEnv('MYSQL_URL') ?: $getEnv('DATABASE_URL');
+if ($dbUrl !== '' && ($host === '127.0.0.1' || strpos($host, '${{') !== false)) {
+    $p = parse_url($dbUrl);
+    if (!empty($p['host'])) $host = $p['host'];
+    if (!empty($p['port'])) $port = (int)$p['port'];
+    if (!empty($p['user'])) $user = $p['user'];
+    if (isset($p['pass']))  $pass = $p['pass'];
+    if (!empty($p['path'])) $name = ltrim($p['path'], '/');
+}
 
 echo "[Seeder] Connecting to MySQL at {$host}:{$port} (db: {$name})...\n";
 
