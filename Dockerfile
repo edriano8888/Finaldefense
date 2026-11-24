@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install mysqli pdo pdo_mysql zip gd curl \
-    && rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* \
+    && rm -f /etc/apache2/mods-enabled/mpm_* \
     && a2enmod mpm_prefork rewrite headers \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -32,5 +32,5 @@ RUN mkdir -p /var/www/html/application/cache /var/www/html/application/logs /var
     && chown -R www-data:www-data /var/www/html/application/cache /var/www/html/application/logs /var/www/html/uploads \
     && chmod -R 775 /var/www/html/application/cache /var/www/html/application/logs /var/www/html/uploads
 
-# Dynamically bind Apache to Railway's injected $PORT and run auto-migration + seeder on startup
-CMD ["sh", "-c", "PORT=${PORT:-80}; sed -i \"s/Listen 80/Listen ${PORT}/g\" /etc/apache2/ports.conf; sed -i \"s/:80/:${PORT}/g\" /etc/apache2/sites-available/000-default.conf; php /var/www/html/migrate_database.php || true; php /var/www/html/seed_database.php || true; apache2-foreground"]
+# Dynamically bind Apache to Railway's injected $PORT, ensure single MPM, and run auto-migration + seeder on startup
+CMD ["sh", "-c", "PORT=${PORT:-80}; rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.*; sed -i \"s/Listen 80/Listen ${PORT}/g\" /etc/apache2/ports.conf; sed -i \"s/:80/:${PORT}/g\" /etc/apache2/sites-available/000-default.conf; php /var/www/html/migrate_database.php || true; php /var/www/html/seed_database.php || true; apache2-foreground"]
