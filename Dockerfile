@@ -23,8 +23,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . /var/www/html/
 
-# Install PHP vendor dependencies if composer.json exists
-RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader --no-interaction; fi
+# Install PHP vendor dependencies if composer.json exists (skip dev scripts)
+RUN if [ -f composer.json ]; then COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --no-scripts --optimize-autoloader --no-interaction; fi
 
 # Ensure cache, logs, and uploads directories exist and are writable by Apache
 RUN mkdir -p /var/www/html/application/cache /var/www/html/application/logs /var/www/html/uploads \
