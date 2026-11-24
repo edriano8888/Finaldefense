@@ -73,20 +73,42 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
-$db_hostname = getenv('DB_HOSTNAME') ?: '127.0.0.1';
-$db_hostname = trim((string)$db_hostname);
+$get_env_val = function($key) {
+	$val = getenv($key);
+	if ($val !== false && $val !== '') return trim((string)$val, " \t\n\r\0\x0B\"'");
+	if (isset($_ENV[$key]) && $_ENV[$key] !== '') return trim((string)$_ENV[$key], " \t\n\r\0\x0B\"'");
+	if (isset($_SERVER[$key]) && $_SERVER[$key] !== '') return trim((string)$_SERVER[$key], " \t\n\r\0\x0B\"'");
+	return '';
+};
+
+$db_hostname = $get_env_val('DB_HOSTNAME') ?: $get_env_val('MYSQLHOST') ?: '127.0.0.1';
+$db_port     = $get_env_val('DB_PORT') ?: $get_env_val('MYSQLPORT') ?: '3306';
+$db_username = $get_env_val('DB_USERNAME') ?: $get_env_val('MYSQLUSER') ?: 'root';
+$db_password = $get_env_val('DB_PASSWORD') ?: $get_env_val('MYSQLPASSWORD') ?: '';
+$db_database = $get_env_val('DB_NAME') ?: $get_env_val('MYSQLDATABASE') ?: 'armful_db';
+
+// Fallback: parse MYSQL_URL or DATABASE_URL if provided by Railway
+$db_url = $get_env_val('MYSQL_URL') ?: $get_env_val('DATABASE_URL');
+if ($db_url !== '' && ($db_hostname === '127.0.0.1' || strpos($db_hostname, '${{') !== false)) {
+	$parsed = parse_url($db_url);
+	if (!empty($parsed['host'])) $db_hostname = $parsed['host'];
+	if (!empty($parsed['port'])) $db_port     = (string)$parsed['port'];
+	if (!empty($parsed['user'])) $db_username = $parsed['user'];
+	if (isset($parsed['pass']))  $db_password = $parsed['pass'];
+	if (!empty($parsed['path'])) $db_database = ltrim($parsed['path'], '/');
+}
+
 if (strtolower($db_hostname) === 'localhost' && DIRECTORY_SEPARATOR === '\\') {
 	$db_hostname = '127.0.0.1';
 }
-$db_port = getenv('DB_PORT');
-$db_port = ($db_port && is_numeric($db_port)) ? (int)$db_port : 3306;
+$db_port = is_numeric($db_port) ? (int)$db_port : 3306;
 
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => $db_hostname,
-	'username' => getenv('DB_USERNAME') ?: 'root',
-	'password' => getenv('DB_PASSWORD') ?: '',
-	'database' => getenv('DB_NAME') ?: 'armful_db',
+	'username' => $db_username,
+	'password' => $db_password,
+	'database' => $db_database,
 	'dbdriver' => 'mysqli',
 	'port' => $db_port,
 	'dbprefix' => '',
