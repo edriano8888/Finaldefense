@@ -1,15 +1,9 @@
 <?php
 /**
- * Automatic Database Schema & Admin Seeder for Railway Deployment
- * Runs on container startup when AUTO_SEED_DATABASE=true.
- * Idempotent: safe to run on every redeploy without duplicating data.
+ * Automatic Database Seeder for Railway Deployment
+ * Runs automatically on container startup via Dockerfile.
+ * Idempotent: safe to run on every redeploy without duplicating accounts.
  */
-
-$autoSeed = strtolower(trim((string)(getenv('AUTO_SEED_DATABASE') ?: 'false')));
-if (!in_array($autoSeed, ['true', '1', 'yes'], true)) {
-    echo "[Seeder] AUTO_SEED_DATABASE is not enabled. Skipping.\n";
-    exit(0);
-}
 
 $host = getenv('DB_HOSTNAME') ?: getenv('MYSQLHOST') ?: '127.0.0.1';
 $port = (int)(getenv('DB_PORT') ?: getenv('MYSQLPORT') ?: 3306);
@@ -87,30 +81,19 @@ function ensureUser(mysqli $db, string $name, string $email, string $plainPasswo
     return $newId;
 }
 
-// 2. Seed Admin Account from Railway Environment Variables
-$adminName  = trim((string)(getenv('SEED_ADMIN_NAME') ?: 'Instroom Admin'));
-$adminEmail = trim((string)(getenv('SEED_ADMIN_EMAIL') ?: 'admin@armfulmedia.com'));
-$adminPass  = (string)(getenv('SEED_ADMIN_PASSWORD') ?: 'Admin@2026!');
+// 2. Seed Default Admin, Manager, and Employee Accounts directly in seeder (idempotent)
+$adminId    = ensureUser($mysqli, 'Instroom Admin', 'admin@armfulmedia.com', 'admin123', 'admin', 'superadmin');
+$managerId  = ensureUser($mysqli, 'Manager', 'manager@armfulmedia.com', 'manager123', 'manager', 'user');
+$employeeId = ensureUser($mysqli, 'Employee', 'employee@armfulmedia.com', 'employee123', 'employee', 'user');
 
-$adminId = ensureUser($mysqli, $adminName, $adminEmail, $adminPass, 'admin', 'superadmin');
-
-// 3. Seed Manager & Employee Accounts (for full role testing / defense demo)
-$managerEmail = trim((string)(getenv('SEED_MANAGER_EMAIL') ?: 'manager@armfulmedia.com'));
-$managerPass  = (string)(getenv('SEED_MANAGER_PASSWORD') ?: 'manager123');
-$managerId = ensureUser($mysqli, 'Manager', $managerEmail, $managerPass, 'manager', 'user');
-
-$employeeEmail = trim((string)(getenv('SEED_EMPLOYEE_EMAIL') ?: 'employee@armfulmedia.com'));
-$employeePass  = (string)(getenv('SEED_EMPLOYEE_PASSWORD') ?: 'employee123');
-$employeeId = ensureUser($mysqli, 'Employee', $employeeEmail, $employeePass, 'employee', 'user');
-
-// 4. Ensure at least one Default Brand exists and link seeded users
+// 3. Ensure at least one Default Brand exists and link seeded users
 $brandCheck = $mysqli->query("SELECT id FROM brands ORDER BY id ASC LIMIT 1");
 $brandId = 0;
 if ($brandCheck && $brandRow = $brandCheck->fetch_assoc()) {
     $brandId = (int)$brandRow['id'];
     echo "[Seeder] Default brand already exists (ID: {$brandId}).\n";
 } else {
-    $brandName = trim((string)(getenv('SEED_BRAND_NAME') ?: 'JBL'));
+    $brandName = 'JBL';
     $industry = 'Consumer Electronics';
     $ownerId = $adminId > 0 ? $adminId : 1;
     $bStmt = $mysqli->prepare("INSERT INTO brands (name, industry, owner_id) VALUES (?, ?, ?)");

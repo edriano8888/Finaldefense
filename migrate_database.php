@@ -1,18 +1,9 @@
 <?php
 /**
  * Automatic Database Migration (Tables + Full Data) for Railway Deployment
- * Runs on container startup when AUTO_MIGRATE_DATABASE=true.
- * Idempotent: imports database/armful_db_seed.sql only when the database is empty (no `users` table),
- * or when FORCE_MIGRATE_DATABASE=true.
+ * Runs automatically on container startup via Dockerfile.
+ * Idempotent: imports database/armful_db_seed.sql only when the database is empty (no `users` table).
  */
-
-$autoMigrate = strtolower(trim((string)(getenv('AUTO_MIGRATE_DATABASE') ?: 'false')));
-$forceMigrate = strtolower(trim((string)(getenv('FORCE_MIGRATE_DATABASE') ?: 'false')));
-
-if (!in_array($autoMigrate, ['true', '1', 'yes'], true)) {
-    echo "[Migrate] AUTO_MIGRATE_DATABASE is not enabled. Skipping.\n";
-    exit(0);
-}
 
 $host = getenv('DB_HOSTNAME') ?: getenv('MYSQLHOST') ?: '127.0.0.1';
 $port = (int)(getenv('DB_PORT') ?: getenv('MYSQLPORT') ?: 3306);
@@ -41,9 +32,8 @@ $mysqli->set_charset('utf8mb4');
 
 $tableCheck = $mysqli->query("SHOW TABLES LIKE 'users'");
 $hasUsersTable = ($tableCheck && $tableCheck->num_rows > 0);
-$shouldForce = in_array($forceMigrate, ['true', '1', 'yes'], true);
 
-if ($hasUsersTable && !$shouldForce) {
+if ($hasUsersTable) {
     echo "[Migrate] Database tables already exist. Skipping full SQL import.\n";
     $mysqli->close();
     exit(0);
