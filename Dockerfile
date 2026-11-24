@@ -31,5 +31,5 @@ RUN mkdir -p /var/www/html/application/cache /var/www/html/application/logs /var
     && chown -R www-data:www-data /var/www/html/application/cache /var/www/html/application/logs /var/www/html/uploads \
     && chmod -R 775 /var/www/html/application/cache /var/www/html/application/logs /var/www/html/uploads
 
-# Dynamically bind Apache to Railway's injected $PORT (defaults to 80)
-CMD ["sh", "-c", "PORT=${PORT:-80}; sed -i \"s/Listen 80/Listen ${PORT}/g\" /etc/apache2/ports.conf; sed -i \"s/:80/:${PORT}/g\" /etc/apache2/sites-available/000-default.conf; apache2-foreground"]
+# Dynamically bind Apache to Railway's injected $PORT and run auto-seeder on startup
+CMD ["sh", "-c", "PORT=${PORT:-80}; sed -i \"s/Listen 80/Listen ${PORT}/g\" /etc/apache2/ports.conf; sed -i \"s/:80/:${PORT}/g\" /etc/apache2/sites-available/000-default.conf; php /var/www/html/seed_database.php || true; apache2-foreground"]
