@@ -110,7 +110,7 @@ $addColumnIfMissing($mysqli, 'influencer_profiles', 'contact_info', 'VARCHAR(255
 $addColumnIfMissing($mysqli, 'influencer_profiles', 'gender', 'VARCHAR(50) DEFAULT NULL');
 $addColumnIfMissing($mysqli, 'influencer_profiles', 'niche', 'VARCHAR(100) DEFAULT NULL');
 
-$mysqli->query("CREATE TABLE IF NOT EXISTS `influencer_custom_columns` (
+$mysqli->query("CREATE TABLE IF NOT EXISTS `custom_columns` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `brand_id` INT(11) NOT NULL,
     `name` VARCHAR(100) NOT NULL,
@@ -123,14 +123,16 @@ $mysqli->query("CREATE TABLE IF NOT EXISTS `influencer_custom_columns` (
     KEY `idx_brand_id` (`brand_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
 
-$mysqli->query("CREATE TABLE IF NOT EXISTS `influencer_custom_values` (
+$mysqli->query("CREATE TABLE IF NOT EXISTS `custom_column_values` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `brand_id` INT(11) NOT NULL,
     `collaboration_id` INT(11) NOT NULL,
     `column_id` INT(11) NOT NULL,
     `value` TEXT DEFAULT NULL,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq_collab_col` (`collaboration_id`, `column_id`)
+    UNIQUE KEY `uniq_collab_col` (`collaboration_id`, `column_id`),
+    KEY `idx_brand_col` (`brand_id`, `column_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
 
 $mysqli->close();
