@@ -107,6 +107,7 @@ $addColumnIfMissing($mysqli, 'collaborations', 'date_reviewed', 'DATETIME DEFAUL
 $addColumnIfMissing($mysqli, 'influencer_profiles', 'first_name', 'VARCHAR(100) DEFAULT NULL');
 $addColumnIfMissing($mysqli, 'influencer_profiles', 'last_name', 'VARCHAR(100) DEFAULT NULL');
 $addColumnIfMissing($mysqli, 'influencer_profiles', 'contact_info', 'VARCHAR(255) DEFAULT NULL');
+$addColumnIfMissing($mysqli, 'influencer_profiles', 'gender', 'VARCHAR(50) DEFAULT NULL');
 $addColumnIfMissing($mysqli, 'influencer_profiles', 'niche', 'VARCHAR(100) DEFAULT NULL');
 
 $mysqli->query("CREATE TABLE IF NOT EXISTS `influencer_custom_columns` (
