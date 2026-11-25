@@ -14,6 +14,7 @@ class MY_Controller extends CI_Controller {
         date_default_timezone_set('Asia/Manila');
         if (isset($this->db)) {
             $this->db->query("SET time_zone = '+08:00'");
+            $this->db->query("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
         }
     }
 }
@@ -35,6 +36,7 @@ class Brand_Controller extends CI_Controller {
         date_default_timezone_set('Asia/Manila');
         if (isset($this->db)) {
             $this->db->query("SET time_zone = '+08:00'");
+            $this->db->query("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
         }
         $this->load->library('session');
         $this->load->helper('url');
