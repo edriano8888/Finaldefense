@@ -2015,10 +2015,12 @@ class Influencer extends Brand_Controller {
         }
 
         $row = $this->db
-            ->select('t.assigned_to, c.brand_id, u.name AS assignee_name')
+            ->select('t.assigned_to, t.task_name, c.brand_id, u.name AS assignee_name, ia.username AS influencer_username')
             ->from('influencer_tasks t')
             ->join('campaigns c', 't.campaign_id = c.id', 'left')
             ->join('users u', 't.assigned_to = u.id', 'left')
+            ->join('collaborations col', 't.collaboration_id = col.id', 'left')
+            ->join('influencer_accounts ia', 'col.account_id = ia.id', 'left')
             ->where('t.id', $task_id)
             ->get()
             ->row();
@@ -2040,8 +2042,17 @@ class Influencer extends Brand_Controller {
         }
 
         $this->Campaign_model->update_task_status($task_id, $status);
-        $this->session->set_flashdata('success', $status === 'Done' ? 'Task marked as completed!' : 'Task marked as pending.');
-        redirect($redirect_url);
+        if ($status === 'Done') {
+            $this->session->set_flashdata('success', 'Task marked as completed and moved to Completed Archive!');
+            $this->session->set_flashdata('completed_task_meta', [
+                'task_name' => (string)($row->task_name ?? 'Task'),
+                'influencer_username' => (string)($row->influencer_username ?? '')
+            ]);
+            redirect('influencer/my_tasks?status=Done');
+        } else {
+            $this->session->set_flashdata('success', 'Task moved back to Pending.');
+            redirect('influencer/my_tasks?status=Pending');
+        }
     }
 
     public function export_selected_csv() {

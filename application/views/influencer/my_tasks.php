@@ -102,6 +102,51 @@
                     </div>
                 <?php endif; ?>
 
+                <!-- Quick Workflow Status Tabs (Active Pending vs Completed Archive) -->
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+                    <div class="inline-flex items-center bg-white border border-gray-200 rounded-2xl p-1 shadow-xs">
+                        <a href="<?php echo base_url('influencer/my_tasks'); ?>" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all <?php echo empty($status) ? 'bg-gray-900 text-white shadow-xs' : 'text-gray-500 hover:text-gray-800'; ?>">
+                            <i class="fas fa-layer-group mr-1.5"></i> All Tasks
+                        </a>
+                        <a href="<?php echo base_url('influencer/my_tasks?status=Pending'); ?>" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all <?php echo ($status === 'Pending') ? 'bg-amber-500 text-white shadow-xs' : 'text-gray-500 hover:text-gray-800'; ?>">
+                            <i class="fas fa-clock mr-1.5"></i> Active / Pending
+                        </a>
+                        <a href="<?php echo base_url('influencer/my_tasks?status=Done'); ?>" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all <?php echo ($status === 'Done') ? 'bg-brand-green text-white shadow-xs' : 'text-gray-500 hover:text-gray-800'; ?>">
+                            <i class="fas fa-check-circle mr-1.5"></i> Completed Archive
+                        </a>
+                    </div>
+                    <?php $completed_meta = $this->session->flashdata('completed_task_meta'); ?>
+                    <?php if (!empty($completed_meta) && is_array($completed_meta)): ?>
+                        <div class="w-full bg-emerald-50 border border-emerald-200 rounded-2xl px-5 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-brand-green text-white flex items-center justify-center shrink-0">
+                                    <i class="fas fa-check-double text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-black text-emerald-900">
+                                        Completed: <?php echo htmlspecialchars((string)($completed_meta['task_name'] ?? 'Task')); ?>
+                                        <?php if (!empty($completed_meta['influencer_username'])): ?>
+                                            <span class="text-brand-green">(@<?php echo htmlspecialchars((string)$completed_meta['influencer_username']); ?>)</span>
+                                        <?php endif; ?>
+                                    </p>
+                                    <p class="text-[11px] text-emerald-700 font-medium">Moved to Completed Archive. Choose your next workflow action:</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 shrink-0">
+                                <a href="<?php echo base_url('influencer/pipeline'); ?>" class="px-3.5 py-2 bg-white hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-extrabold transition-all">
+                                    <i class="fas fa-columns mr-1"></i> Open Pipeline
+                                </a>
+                                <a href="<?php echo base_url('email'); ?>" class="px-3.5 py-2 bg-brand-green hover:bg-brand-deep text-white rounded-xl text-xs font-extrabold transition-all shadow-xs">
+                                    <i class="fas fa-paper-plane mr-1"></i> Send Email
+                                </a>
+                                <a href="<?php echo base_url('influencer/my_tasks?status=Pending'); ?>" class="px-3.5 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-xl text-xs font-extrabold transition-all">
+                                    Back to Pending →
+                                </a>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
                 <!-- Quick Stats -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
                     <?php 
@@ -260,7 +305,7 @@
                                                     <?php echo $grp_badge_text; ?>
                                                 </span>
                                             </div>
-                                            <div class="flex flex-wrap items-center gap-2 mt-1">
+                                            <div class="flex flex-wrap items-center gap-2 mt-1.5">
                                                 <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider"><?php echo htmlspecialchars((string)$grp['platform']); ?></span>
                                                 <span class="text-gray-300">•</span>
                                                 <?php foreach ($grp['campaigns'] as $c_title): ?>
@@ -269,6 +314,16 @@
                                                         <?php echo htmlspecialchars((string)$c_title); ?>
                                                     </span>
                                                 <?php endforeach; ?>
+                                                <span class="text-gray-300 hidden sm:inline">•</span>
+                                                <a href="<?php echo base_url('email'); ?>" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-100 text-[10px] font-extrabold transition-colors" title="Send Outreach Email">
+                                                    <i class="fas fa-envelope text-[9px]"></i> Email
+                                                </a>
+                                                <a href="<?php echo base_url('influencer/pipeline'); ?>" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-100 text-[10px] font-extrabold transition-colors" title="Update Stage in Pipeline">
+                                                    <i class="fas fa-columns text-[9px]"></i> Pipeline
+                                                </a>
+                                                <a href="<?php echo base_url('influencer/manage?search=' . urlencode((string)$grp['username'])); ?>" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 hover:bg-emerald-100 text-brand-deep border border-emerald-100 text-[10px] font-extrabold transition-colors" title="Open in Influencer List">
+                                                    <i class="fas fa-table text-[9px]"></i> Sheet
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
