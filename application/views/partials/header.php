@@ -79,7 +79,7 @@ $user_profile_image = $CI->session->userdata('profile_image');
 </style>
 
 <!-- Top Navigation Bar -->
-<header class="h-16 glass-header flex items-center justify-between px-6 z-20 sticky top-0 shadow-sm transition-all duration-300">
+<header class="h-16 glass-header flex items-center justify-between px-6 z-40 sticky top-0 shadow-sm transition-all duration-300">
     <!-- Left Section: Mobile Toggle & Breadcrumbs -->
     <div class="flex items-center gap-4">
         <button class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none p-2 rounded-xl hover:bg-gray-100 transition-colors" onclick="toggleSidebar()">
