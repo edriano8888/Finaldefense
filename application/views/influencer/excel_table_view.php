@@ -2208,4 +2208,111 @@ function confirmDeleteAll() {
         window.location.href = window.EXCEL_URLS.delete_all;
     }
 }
+
+// Complete Excel Shortcuts: Ctrl+Click Multi-select, Shift+Click Range-select, Esc Clear, Dbl-Click View Profile, Drag Custom Columns
+(function initFullExcelShortcuts() {
+    const tableEl = document.querySelector('#excelRootContainer table');
+    if (!tableEl) return;
+
+    let lastRowIndex = null;
+
+    // 1. Ctrl+Click (Multi-select) & Shift+Click (Range select) anywhere on a row
+    tableEl.addEventListener('click', function(e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT' || e.target.closest('button')) return;
+        const tr = e.target.closest('tbody tr');
+        if (!tr) return;
+
+        const rows = Array.from(tableEl.querySelectorAll('tbody tr'));
+        const idx = rows.indexOf(tr);
+        if (idx === -1) return;
+
+        const cb = tr.querySelector('input.row-checkbox, input[type="checkbox"]');
+        if (!cb) return;
+
+        if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            cb.checked = !cb.checked;
+            cb.dispatchEvent(new Event('change', { bubbles: true }));
+            if (typeof updateBulkActionBar === 'function') updateBulkActionBar();
+            lastRowIndex = idx;
+        } else if (e.shiftKey && lastRowIndex !== null) {
+            e.preventDefault();
+            const start = Math.min(lastRowIndex, idx);
+            const end = Math.max(lastRowIndex, idx);
+            for (let i = start; i <= end; i++) {
+                const rowCb = rows[i].querySelector('input.row-checkbox, input[type="checkbox"]');
+                if (rowCb && !rowCb.checked) {
+                    rowCb.checked = true;
+                    rowCb.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            }
+            if (typeof updateBulkActionBar === 'function') updateBulkActionBar();
+        } else {
+            lastRowIndex = idx;
+        }
+    });
+
+    // 2. Global Esc: Cancel editing / close open dropdowns / clear cell focus
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.excel-cell.ring-2, .excel-cell.focused-cell').forEach(c => {
+                c.classList.remove('ring-2', 'ring-blue-500', 'focused-cell');
+            });
+            ['excelExportMenu', 'excelMoreMenu'].forEach(id => {
+                const m = document.getElementById(id);
+                if (m) m.classList.add('hidden');
+            });
+        }
+    });
+
+    // 3. Dbl-Click on row index (#) or avatar -> View Influencer Profile
+    tableEl.addEventListener('dblclick', function(e) {
+        const tr = e.target.closest('tbody tr');
+        if (!tr) return;
+        const isFirstCol = e.target.closest('td:first-child') || e.target.closest('img') || e.target.closest('.rounded-full');
+        if (!isFirstCol) return;
+
+        const collabId = tr.getAttribute('data-id') || tr.dataset.id;
+        if (collabId && typeof openInfluencerProfile === 'function') {
+            openInfluencerProfile(collabId);
+        } else if (collabId && typeof viewInfluencer === 'function') {
+            viewInfluencer(collabId);
+        } else {
+            // Fallback: open the creator's social URL if present in the row
+            const handleCell = tr.querySelector('[data-field="username"]');
+            const platCell = tr.querySelector('[data-field="platform"]');
+            const uname = handleCell ? handleCell.textContent.replace('@', '').trim() : '';
+            const plat = platCell ? (platCell.dataset.value || platCell.textContent || 'instagram').toLowerCase().trim() : 'instagram';
+            if (uname) {
+                const url = plat.includes('tiktok') ? `https://www.tiktok.com/@${uname}` : (plat.includes('youtube') ? `https://www.youtube.com/@${uname}` : `https://www.instagram.com/${uname}`);
+                window.open(url, '_blank', 'noopener');
+            }
+        }
+    });
+
+    // 4. Drag custom column headers to reorder/assign groups
+    let draggedTh = null;
+    tableEl.querySelectorAll('thead th[data-custom-col-id]').forEach(th => {
+        th.setAttribute('draggable', 'true');
+        th.style.cursor = 'grab';
+        th.addEventListener('dragstart', function(e) {
+            draggedTh = th;
+            th.classList.add('opacity-50');
+            e.dataTransfer.effectAllowed = 'move';
+        });
+        th.addEventListener('dragend', function() {
+            th.classList.remove('opacity-50');
+            draggedTh = null;
+        });
+        th.addEventListener('dragover', function(e) {
+            if (draggedTh && draggedTh !== th) e.preventDefault();
+        });
+        th.addEventListener('drop', function(e) {
+            e.preventDefault();
+            if (draggedTh && draggedTh !== th && draggedTh.parentNode === th.parentNode) {
+                th.parentNode.insertBefore(draggedTh, th);
+            }
+        });
+    });
+})();
 </script>
