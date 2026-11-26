@@ -1415,10 +1415,9 @@ class Email_model extends CI_Model {
      * Disconnect/Remove an email account for a user.
      * Also cleans up local threads and messages associated with that account.
      */
-    public function disconnect_account($account_id, $user_id) {
+    public function disconnect_account($account_id, $user_id = null) {
         $account = $this->db->get_where('email_accounts', [
-            'id' => (int)$account_id,
-            'user_id' => (int)$user_id
+            'id' => (int)$account_id
         ])->row();
 
         if (!$account) {

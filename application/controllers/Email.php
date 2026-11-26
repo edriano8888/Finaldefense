@@ -2350,6 +2350,16 @@ class Email extends CI_Controller {
         }
 
         $account = $this->Email_model->get_account($account_id);
+        if (!$account) {
+            if ($this->input->is_ajax_request()) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode(['status' => 'error', 'message' => 'Account not found.']));
+            }
+            $this->session->set_flashdata('error', 'Account not found.');
+            redirect('email');
+            return;
+        }
         $is_owner = ($account->user_id == $this->user_id);
         $is_same_brand = (!empty($account->brand_id) && $account->brand_id == $this->brand_id);
         $is_management = in_array($this->user_role, ['admin', 'manager']);
