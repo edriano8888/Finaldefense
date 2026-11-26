@@ -89,16 +89,34 @@ class Influencer_model extends CI_Model {
         }
 
         if (!empty($filters['platform']) && $filters['platform'] != 'Platform') {
-            $this->db->where('a.platform', $filters['platform']);
+            $this->db->where('LOWER(a.platform)', strtolower(trim((string)$filters['platform'])));
         }
 
         if (!empty($filters['niche']) && $filters['niche'] != 'Niche') {
-            $this->db->join('influencer_niches n', 'a.id = n.account_id', 'left');
-            $this->db->where('n.niche_name', $filters['niche']);
+            $niche_kw = trim((string)$filters['niche']);
+            $this->db->group_start();
+            $this->db->like("COALESCE(NULLIF(p.niche, ''), 'General')", $niche_kw);
+            $this->db->or_like('p.notes', $niche_kw);
+            $this->db->group_end();
         }
 
         if (!empty($filters['status']) && $filters['status'] != 'Status') {
-            $this->db->where('a.status', $filters['status']);
+            $st = trim((string)$filters['status']);
+            if (in_array($st, ['Pending', 'Qualified', 'Approved', 'Disqualified', 'Declined'], true)) {
+                $this->db->group_start();
+                if ($st === 'Pending') {
+                    $this->db->where('c.assessment', 'Pending');
+                    $this->db->or_where('c.assessment IS NULL', null, false);
+                    $this->db->or_where('c.assessment', '');
+                } elseif (in_array($st, ['Qualified', 'Approved'], true)) {
+                    $this->db->where_in('c.assessment', ['Qualified', 'Approved']);
+                } else {
+                    $this->db->where_in('c.assessment', ['Disqualified', 'Declined']);
+                }
+                $this->db->group_end();
+            } else {
+                $this->db->where('a.status', $st);
+            }
         }
 
         if (!empty($filters['pipeline_status'])) {
