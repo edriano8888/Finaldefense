@@ -1094,9 +1094,14 @@
                     <div style="width:794px;background:#ffffff;color:#0f172a;">
                         <div style="background:linear-gradient(90deg,#0A2E1C 0%,#0F6B3E 55%,#1FAE5B 100%);padding:28px 32px;color:#ffffff;">
                             <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:16px;margin-bottom:14px;">
-                                <div>
-                                    <div style="font-size:20px;font-weight:900;letter-spacing:-0.02em;">INSTROOM</div>
-                                    <div style="font-size:10px;font-weight:700;color:#a7f3d0;text-transform:uppercase;letter-spacing:0.12em;">Client-Ready Ambassador Campaign Report</div>
+                                <div style="display:flex;align-items:center;gap:12px;">
+                                    <div style="width:44px;height:44px;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.25);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                                        <img src="<?= base_url('assets/images/logo_icon.png') ?>" alt="Instroom" crossorigin="anonymous" style="width:30px;height:30px;object-fit:contain;">
+                                    </div>
+                                    <div>
+                                        <div style="font-size:20px;font-weight:900;letter-spacing:-0.02em;">INSTROOM</div>
+                                        <div style="font-size:10px;font-weight:700;color:#a7f3d0;text-transform:uppercase;letter-spacing:0.12em;">Client-Ready Ambassador Campaign Report</div>
+                                    </div>
                                 </div>
                                 <div style="text-align:right;">
                                     <div style="font-size:10px;font-weight:800;text-transform:uppercase;background:rgba(255,255,255,0.16);padding:4px 10px;border-radius:999px;display:inline-block;">Executive Report</div>

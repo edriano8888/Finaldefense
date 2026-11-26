@@ -49,7 +49,7 @@
             <div class="flex flex-row justify-between items-center gap-4 relative z-10 mb-6 border-b border-white/20 pb-6">
                 <div class="flex items-center gap-3.5">
                     <div class="w-12 h-12 bg-white/10 rounded-2xl border border-white/20 flex items-center justify-center backdrop-blur-md">
-                        <i class="fas fa-rocket text-xl text-white"></i>
+                        <img src="<?php echo base_url('assets/images/logo_icon.png'); ?>" alt="Instroom Logo" class="w-8 h-8 object-contain" crossorigin="anonymous">
                     </div>
                     <div>
                         <span class="text-xl font-black tracking-tight text-white">INSTROOM</span>
