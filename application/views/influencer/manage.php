@@ -845,84 +845,78 @@
         </div>
     </div>
     
-    <!-- Influencer Detail Modal -->
-    <div id="influencerDetailModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true" onclick="toggleModal('influencerDetailModal')"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl w-full relative animate-fade-in-up">
-                
-                <button onclick="toggleModal('influencerDetailModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors z-10">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
+    <!-- Executive Influencer Profile Slide-Over Drawer -->
+    <div id="influencerDetailModal" class="fixed inset-0 z-50 hidden overflow-hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity" aria-hidden="true" onclick="toggleModal('influencerDetailModal')"></div>
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-4 sm:pl-10">
+            <div class="w-screen max-w-3xl bg-white shadow-2xl flex flex-col h-full overflow-hidden">
 
-                <div class="bg-white px-8 pt-7 pb-4 border-b border-gray-100">
-                    <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
-                        <div class="flex items-center gap-4 min-w-0">
-                            <div id="detail_avatar" class="w-12 h-12 rounded-2xl bg-brand-green text-white flex items-center justify-center font-black text-lg shadow-lg shadow-emerald-900/20">I</div>
-                            <div class="min-w-0">
-                                <div class="flex items-center gap-3 min-w-0">
-                                    <h3 id="detail_display_name" class="text-xl font-extrabold text-gray-900 truncate">Influencer</h3>
-                                    <span id="detail_display_platform" class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest bg-gray-50 text-gray-600 border border-gray-100">Platform</span>
-                                </div>
-                                <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-                                    <span id="detail_display_username" class="font-bold text-gray-700">@-</span>
-                                    <span class="text-gray-300">•</span>
-                                    <span id="detail_display_email" class="text-gray-500 truncate">-</span>
-                                </div>
-                            </div>
-                        </div>
+                <!-- Branded Executive Header -->
+                <div class="bg-gradient-to-r from-[#0A2E1C] via-[#0F6B3E] to-[#1FAE5B] px-6 sm:px-8 pt-6 pb-5 text-white shrink-0 relative">
+                    <button type="button" onclick="toggleModal('influencerDetailModal')" class="absolute top-5 right-5 w-9 h-9 rounded-xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-all cursor-pointer" title="Close Profile">
+                        <i class="fas fa-times text-base"></i>
+                    </button>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full lg:w-auto">
-                            <div class="min-w-0">
-                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Status</label>
-                                <select id="detail_status" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-green/20 focus:border-brand-green transition-all">
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
+                    <div class="flex items-center gap-4 pr-12 mb-5">
+                        <div id="detail_avatar" class="w-14 h-14 rounded-2xl bg-white/20 border-2 border-white/30 text-white flex items-center justify-center font-black text-xl shadow-lg shrink-0 backdrop-blur-md">I</div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2.5 flex-wrap">
+                                <h3 id="detail_display_name" class="text-xl font-black text-white truncate">Influencer</h3>
+                                <span id="detail_display_platform" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-white/20 text-emerald-100 border border-white/20">Platform</span>
                             </div>
-                            <div class="min-w-0">
-                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Pipeline Status</label>
-                                <select id="detail_pipeline_status" class="w-full bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5 text-sm font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-400/20 focus:border-amber-400 transition-all">
-                                    <option value="For Outreach">For Outreach</option>
-                                    <option value="Contacted">Contacted</option>
-                                    <option value="Replied">Replied</option>
-                                    <option value="In - Progress">In - Progress</option>
-                                    <option value="Completed">Completed</option>
-                                    <option value="Not Interested">Not Interested</option>
-                                </select>
-                            </div>
-                            <div class="min-w-0">
-                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Campaign Type</label>
-                                <select id="detail_campaign_type" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-green/20 focus:border-brand-green transition-all">
-                                    <option value="">Select Type</option>
-                                    <option value="Seeding">Seeding</option>
-                                    <option value="Paid">Paid</option>
-                                    <option value="Affiliate">Affiliate</option>
-                                </select>
+                            <div class="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs text-emerald-100 mt-1">
+                                <span id="detail_display_username" class="font-bold text-white">@-</span>
+                                <span class="opacity-50">•</span>
+                                <span id="detail_display_email" class="truncate opacity-90">-</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-8 mt-6 overflow-x-auto">
-                        <button onclick="switchTab('basic')" id="tab-btn-basic" class="tab-btn flex items-center gap-2 pb-3 border-b-2 border-black text-sm font-bold text-gray-900 whitespace-nowrap">
-                            <i class="fas fa-info-circle"></i> Basic Information
-                        </button>
-                        <button onclick="switchTab('order')" id="tab-btn-order" class="tab-btn flex items-center gap-2 pb-3 border-b-2 border-transparent text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors whitespace-nowrap">
-                            <i class="fas fa-shopping-cart"></i> Order Details
-                        </button>
-                        <button class="flex items-center gap-2 pb-3 border-b-2 border-transparent text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors whitespace-nowrap">
-                            <i class="fas fa-chart-bar"></i> Post Insight
-                        </button>
-                        <button class="flex items-center gap-2 pb-3 border-b-2 border-transparent text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors whitespace-nowrap">
-                            <i class="fas fa-chart-line"></i> Statistics
-                        </button>
+                    <!-- Quick Status Controls -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-white/10 backdrop-blur-md rounded-xl p-2.5 border border-white/15">
+                            <label class="block text-[9px] font-extrabold text-emerald-200 uppercase tracking-widest mb-1">Status</label>
+                            <select id="detail_status" class="w-full bg-white text-gray-900 rounded-lg px-2.5 py-1.5 text-xs font-extrabold focus:outline-none cursor-pointer">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md rounded-xl p-2.5 border border-white/15">
+                            <label class="block text-[9px] font-extrabold text-emerald-200 uppercase tracking-widest mb-1">Pipeline Stage</label>
+                            <select id="detail_pipeline_status" class="w-full bg-amber-50 text-gray-900 rounded-lg px-2.5 py-1.5 text-xs font-extrabold focus:outline-none cursor-pointer">
+                                <option value="For Outreach">For Outreach</option>
+                                <option value="Contacted">Contacted</option>
+                                <option value="Replied">Replied</option>
+                                <option value="In - Progress">In - Progress</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Not Interested">Not Interested</option>
+                            </select>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md rounded-xl p-2.5 border border-white/15">
+                            <label class="block text-[9px] font-extrabold text-emerald-200 uppercase tracking-widest mb-1">Campaign Type</label>
+                            <select id="detail_campaign_type" class="w-full bg-white text-gray-900 rounded-lg px-2.5 py-1.5 text-xs font-extrabold focus:outline-none cursor-pointer">
+                                <option value="">Select Type</option>
+                                <option value="Seeding">Seeding</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Affiliate">Affiliate</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Content Section -->
-                <div class="p-8 bg-[#F8FAFC] max-h-[72vh] overflow-y-auto">
-                    <form id="detailForm" onsubmit="event.preventDefault(); saveDetail();">
+                <!-- Clean Navigation Tabs -->
+                <div class="bg-white px-6 sm:px-8 border-b border-gray-200 flex items-center gap-6 shrink-0">
+                    <button type="button" onclick="switchTab('basic')" id="tab-btn-basic" class="tab-btn flex items-center gap-2 py-3.5 border-b-2 border-brand-green text-xs font-extrabold text-gray-900 whitespace-nowrap cursor-pointer">
+                        <i class="fas fa-id-card text-brand-green"></i> Basic Information
+                    </button>
+                    <button type="button" onclick="switchTab('order')" id="tab-btn-order" class="tab-btn flex items-center gap-2 py-3.5 border-b-2 border-transparent text-xs font-bold text-gray-400 hover:text-gray-700 transition-colors whitespace-nowrap cursor-pointer">
+                        <i class="fas fa-shopping-bag"></i> Order & Deliverables
+                    </button>
+                </div>
+
+                <!-- Scrollable Form Body + Fixed Footer -->
+                <form id="detailForm" onsubmit="event.preventDefault(); saveDetail();" class="flex-1 flex flex-col min-h-0">
+                    <div class="flex-1 overflow-y-auto p-6 sm:p-8 bg-[#F8FAFC]">
                         <input type="hidden" id="detail_id" name="id">
                         
                         <!-- Basic Information Tab -->
@@ -1144,16 +1138,23 @@
                             </div>
                         </div>
 
-                        <div class="sticky bottom-0 -mx-8 mt-10 px-8 py-5 bg-white/90 backdrop-blur border-t border-gray-100 flex items-center justify-end gap-3">
-                            <button type="button" onclick="toggleModal('influencerDetailModal')" class="px-5 py-2.5 rounded-xl text-sm font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors">
+                    </div>
+
+                    <!-- Clean Pinned Footer (Never overlaps Notes!) -->
+                    <div class="shrink-0 px-6 sm:px-8 py-4 bg-white border-t border-gray-200 flex items-center justify-between gap-3">
+                        <span class="text-[11px] font-semibold text-gray-400 hidden sm:inline">
+                            <i class="fas fa-shield-alt text-brand-green mr-1"></i> Changes sync live to Influencer List & Pipeline
+                        </span>
+                        <div class="flex items-center gap-3 ml-auto">
+                            <button type="button" onclick="toggleModal('influencerDetailModal')" class="px-5 py-2.5 rounded-xl text-xs font-extrabold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors cursor-pointer">
                                 Close
                             </button>
-                            <button type="submit" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-brand-deep hover:bg-brand-green transition-colors shadow-lg shadow-emerald-900/15">
-                                Save Changes
+                            <button type="submit" class="px-6 py-2.5 rounded-xl text-xs font-extrabold text-white bg-brand-green hover:bg-brand-deep transition-all shadow-md shadow-emerald-500/20 cursor-pointer">
+                                <i class="fas fa-save mr-1.5"></i> Save Changes
                             </button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
