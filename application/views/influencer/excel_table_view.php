@@ -29,6 +29,29 @@ $inf_colspan = 9 + count($custom_inf_cols);
 $app_colspan = 3 + count($custom_app_cols) + 1;
 ?>
 
+<style>
+    /* Native Microsoft Excel cell cursor (+) when hovering over the spreadsheet table */
+    #excelRootContainer table,
+    #excelRootContainer table tbody td,
+    #excelRootContainer table tbody tr {
+        cursor: cell;
+    }
+    #excelRootContainer table tbody td input[type="text"],
+    #excelRootContainer table tbody td input[type="number"],
+    #excelRootContainer table tbody td input[type="email"],
+    #excelRootContainer table tbody td input[type="url"],
+    #excelRootContainer table tbody td input[type="date"],
+    #excelRootContainer table tbody td textarea {
+        cursor: text;
+    }
+    #excelRootContainer table tbody td input[type="checkbox"],
+    #excelRootContainer table tbody td button,
+    #excelRootContainer table tbody td a,
+    #excelRootContainer table thead th button {
+        cursor: pointer;
+    }
+</style>
+
 <div class="w-full flex flex-col font-sans select-none" id="excelRootContainer">
     <!-- Top Action & Search Bar -->
     <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
