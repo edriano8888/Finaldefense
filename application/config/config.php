@@ -509,6 +509,8 @@ $config['csrf_exclude_uris'] = array(
     'discovery/search',
     'discovery/add',
     'discovery/profile',
+    'profile/.*',
+    'settings/.*',
     'email/.*',
     'email/*',
     'email/mark_all_read',
