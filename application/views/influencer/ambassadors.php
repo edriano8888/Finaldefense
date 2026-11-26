@@ -887,7 +887,7 @@
                             <h5 class="text-xs font-black text-gray-800">Export Final Deliverables</h5>
                             <p class="text-[11px] text-gray-400 font-medium mt-1">Download report as a clean PDF layout for your client call.</p>
                         </div>
-                        <button onclick="exportReportPDF()" class="bg-brand-deep hover:bg-brand-green text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition-all shadow-xs flex items-center gap-2">
+                        <button type="button" onclick="exportReportPDF(this)" class="bg-brand-deep hover:bg-brand-green text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition-all shadow-xs flex items-center gap-2 cursor-pointer">
                             <i class="fas fa-file-pdf"></i>
                             <span>Download PDF</span>
                         </button>
@@ -1063,9 +1063,123 @@
             alert("Shareable link copied to clipboard!");
         }
 
-        function exportReportPDF() {
-            const shareUrl = document.getElementById('report-share-url').value;
-            window.open(shareUrl + '&print=1', '_blank');
+        function exportReportPDF(btn) {
+            const runExport = () => {
+                const origHtml = btn ? btn.innerHTML : '';
+                if (btn) {
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Generating PDF...</span>';
+                    btn.disabled = true;
+                }
+
+                const brandName = '<?= addslashes($brand_name ?? "Instroom Brand") ?>';
+                const gmv = document.getElementById('preview-gmv')?.textContent || '$0.00';
+                const spend = document.getElementById('preview-spend')?.textContent || '$0.00';
+                const roi = document.getElementById('preview-roi')?.textContent || '0.0x';
+                const creators = document.getElementById('preview-creators')?.textContent || '0';
+                const tableRowsHtml = document.getElementById('preview-table-body')?.innerHTML || '<tr><td colspan="4" style="padding:16px;text-align:center;color:#94a3b8;">No creator data</td></tr>';
+                const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                const fileDate = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+
+                // Build clean isolated 794px A4 executive report container (no popup window!)
+                const wrapper = document.createElement('div');
+                wrapper.style.position = 'fixed';
+                wrapper.style.left = '0';
+                wrapper.style.top = '0';
+                wrapper.style.width = '794px';
+                wrapper.style.background = '#ffffff';
+                wrapper.style.zIndex = '-9999';
+                wrapper.style.fontFamily = '"Plus Jakarta Sans", Arial, sans-serif';
+
+                wrapper.innerHTML = `
+                    <div style="width:794px;background:#ffffff;color:#0f172a;">
+                        <div style="background:linear-gradient(90deg,#0A2E1C 0%,#0F6B3E 55%,#1FAE5B 100%);padding:28px 32px;color:#ffffff;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:16px;margin-bottom:14px;">
+                                <div>
+                                    <div style="font-size:20px;font-weight:900;letter-spacing:-0.02em;">INSTROOM</div>
+                                    <div style="font-size:10px;font-weight:700;color:#a7f3d0;text-transform:uppercase;letter-spacing:0.12em;">Client-Ready Ambassador Campaign Report</div>
+                                </div>
+                                <div style="text-align:right;">
+                                    <div style="font-size:10px;font-weight:800;text-transform:uppercase;background:rgba(255,255,255,0.16);padding:4px 10px;border-radius:999px;display:inline-block;">Executive Report</div>
+                                    <div style="font-size:11px;color:#d1fae5;margin-top:4px;">Generated: ${dateStr}</div>
+                                </div>
+                            </div>
+                            <div style="font-size:15px;font-weight:800;">Brand: ${brandName}</div>
+                        </div>
+
+                        <div style="padding:28px 32px;">
+                            <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Performance Overview</div>
+                            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;">
+                                <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px;">
+                                    <div style="font-size:9px;font-weight:800;color:#64748b;text-transform:uppercase;">GMV Generated</div>
+                                    <div style="font-size:18px;font-weight:900;color:#0f172a;margin-top:6px;">${gmv}</div>
+                                </div>
+                                <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px;">
+                                    <div style="font-size:9px;font-weight:800;color:#64748b;text-transform:uppercase;">Retainer Spend</div>
+                                    <div style="font-size:18px;font-weight:900;color:#0f172a;margin-top:6px;">${spend}</div>
+                                </div>
+                                <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:12px;padding:14px;">
+                                    <div style="font-size:9px;font-weight:800;color:#047857;text-transform:uppercase;">ROI Ratio</div>
+                                    <div style="font-size:18px;font-weight:900;color:#1FAE5B;margin-top:6px;">${roi}</div>
+                                </div>
+                                <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px;">
+                                    <div style="font-size:9px;font-weight:800;color:#64748b;text-transform:uppercase;">Active Creators</div>
+                                    <div style="font-size:18px;font-weight:900;color:#0f172a;margin-top:6px;">${creators}</div>
+                                </div>
+                            </div>
+
+                            <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Creator Performance Breakdown</div>
+                            <div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:28px;">
+                                <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                                    <thead>
+                                        <tr style="background:#f8fafc;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:10px;text-transform:uppercase;">
+                                            <th style="padding:10px 14px;text-align:left;">Creator</th>
+                                            <th style="padding:10px 14px;text-align:center;">Spend</th>
+                                            <th style="padding:10px 14px;text-align:center;">GMV</th>
+                                            <th style="padding:10px 14px;text-align:center;">ROI</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${tableRowsHtml}</tbody>
+                                </table>
+                            </div>
+
+                            <div style="border-top:1px solid #e2e8f0;padding-top:14px;display:flex;justify-content:space-between;font-size:10px;color:#64748b;">
+                                <div><strong style="color:#0f172a;">CONFIDENTIAL CLIENT REPORT</strong> • Prepared for ${brandName}</div>
+                                <div>Instroom Media Intelligence • ${dateStr}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(wrapper);
+
+                const captureH = wrapper.scrollHeight || 1122;
+                const pdfH = Math.max(297, Math.ceil((captureH / 794) * 210));
+                const opt = {
+                    margin: 0,
+                    filename: 'Instroom_Ambassador_Report_' + fileDate + '.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, logging: false, width: 794, windowWidth: 794, height: captureH, x: 0, y: 0, scrollX: 0, scrollY: 0, backgroundColor: '#ffffff' },
+                    jsPDF: { unit: 'mm', format: [210, pdfH], orientation: 'portrait', compress: true }
+                };
+
+                const finish = () => {
+                    if (wrapper.parentNode) wrapper.parentNode.removeChild(wrapper);
+                    if (btn) { btn.innerHTML = origHtml; btn.disabled = false; }
+                };
+
+                html2pdf().set(opt).from(wrapper).save().then(finish).catch(err => {
+                    console.error('Ambassador PDF Error:', err);
+                    finish();
+                });
+            };
+
+            if (typeof html2pdf === 'undefined') {
+                const s = document.createElement('script');
+                s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+                s.onload = runExport;
+                document.head.appendChild(s);
+            } else {
+                runExport();
+            }
         }
     </script>
 </body>
