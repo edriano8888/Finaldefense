@@ -199,6 +199,10 @@ class Influencer_model extends CI_Model {
             $this->db->where_in('c.pipeline_status', $statuses);
         }
 
+        // Only show Approved/Qualified influencers with a real handle in the Pipeline
+        $this->db->where_in('c.assessment', ['Qualified', 'Approved']);
+        $this->db->where("TRIM(COALESCE(a.username, '')) !=", '');
+
         // Apply search filter
         if (isset($filters['search']) && !empty($filters['search'])) {
             $search = $filters['search'];
